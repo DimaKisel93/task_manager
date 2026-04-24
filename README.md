@@ -1,6 +1,7 @@
 # Task Manager (React + TypeScript)
 
 Проект создан по требованиям:
+
 - React 18+ (функциональные компоненты и хуки)
 - TypeScript
 - UI библиотека: MUI
@@ -17,6 +18,7 @@ npm run dev:full
 ```
 
 Команда `dev:full` запускает одновременно:
+
 - фронтенд на `http://localhost:5173`
 - JSON Server на `http://localhost:3001`
 
