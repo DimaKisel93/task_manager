@@ -1,5 +1,6 @@
 import { AppBar, Box, Button, Container, Toolbar, Typography } from '@mui/material'
 import { Link, Navigate, Route, Routes } from 'react-router-dom'
+import { TasksPage } from './pages/TasksPage'
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
 
       <Container maxWidth="md" sx={{ py: 4 }}>
         <Routes>
+          <Route path="/" element={<TasksPage />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </Container>
