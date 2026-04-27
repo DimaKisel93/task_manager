@@ -17,7 +17,7 @@
       "description": "Add react-hook-form with zod schema and show validation messages.",
       "status": "inProgress",
       "priority": "medium",
-      "deadline": "2026-04-30",
+      "deadline": "2026-04-27",
       "tags": ["forms", "validation"],
       "createdAt": "2026-04-22T12:30:00.000Z",
       "updatedAt": "2026-04-23T09:45:00.000Z"
@@ -28,7 +28,7 @@
       "description": "Add react-hook-form with zod schema and show validation messages.",
       "status": "inProgress",
       "priority": "medium",
-      "deadline": "2026-04-30",
+      "deadline": "2026-04-26",
       "tags": ["forms", "validation"],
       "createdAt": "2026-04-22T12:30:00.000Z",
       "updatedAt": "2026-04-23T09:45:00.000Z"
@@ -39,7 +39,7 @@
       "description": "Add react-hook-form with zod schema and show validation messages.",
       "status": "inProgress",
       "priority": "medium",
-      "deadline": "2026-04-30",
+      "deadline": "2026-04-28",
       "tags": ["forms", "validation"],
       "createdAt": "2026-04-22T12:30:00.000Z",
       "updatedAt": "2026-04-23T09:45:00.000Z"

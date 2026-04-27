@@ -1,18 +1,31 @@
 import { Card, CardContent, Chip, Stack, Typography } from '@mui/material'
 import type { Task } from '../types/task'
 import { statusMap, priorityMap } from '../constants/tasks'
+import { isTaskOverdue } from '../utils/task'
+import { taskCardStyles } from '../constants/taskStyles'
 
 interface TaskCardProps {
   task: Task
 }
 
 export function TaskCard({ task }: TaskCardProps) {
+  const isOverdue = isTaskOverdue(task)
+
   return (
-    <Card key={task.id}>
+    <Card
+      key={task.id}
+      sx={{
+        transition: 'all 0.2s ease',
+        ...(isOverdue && taskCardStyles.overdue),
+      }}
+    >
       <CardContent>
         <Stack direction="row" justifyContent="space-between" alignItems="center">
           <Typography variant="h6">{task.title}</Typography>
-          <Chip label={statusMap[task.status].label} color={statusMap[task.status].color} />
+          <Stack direction="row" spacing={1}>
+            {isOverdue && <Chip label="Overdue" color="error" size="medium" />}
+            <Chip label={statusMap[task.status].label} color={statusMap[task.status].color} />
+          </Stack>
         </Stack>
         {task.description && (
           <Typography variant="body2" sx={{ mt: 1 }}>

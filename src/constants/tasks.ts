@@ -19,3 +19,4 @@ export const priorityMap: Record<
 }
 
 export const PAGE_SIZE = 5
+export const TASK_STATUS_DONE: TaskStatus = 'done'
