@@ -17,3 +17,5 @@ export const priorityMap: Record<
   medium: { label: 'Medium', color: 'warning' },
   high: { label: 'High', color: 'error' },
 }
+
+export const PAGE_SIZE = 5
