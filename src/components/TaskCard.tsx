@@ -20,9 +20,10 @@ import { taskCardStyles } from '../constants/taskStyles'
 
 interface TaskCardProps {
   task: Task
+  onTagClick?: (tag: string) => void
 }
 
-export function TaskCard({ task }: TaskCardProps) {
+export function TaskCard({ task, onTagClick }: TaskCardProps) {
   const navigate = useNavigate()
   const isOverdue = isTaskOverdue(task)
   const [updateTaskStatus, { isLoading: isUpdatingStatus }] = useUpdateTaskStatusMutation()
@@ -86,7 +87,16 @@ export function TaskCard({ task }: TaskCardProps) {
           {task.tags.length > 0 && (
             <Stack direction="row" spacing={1} sx={{ mt: 1 }}>
               {task.tags.map((tag) => (
-                <Chip key={tag} label={tag} size="small" />
+                <Chip
+                  key={tag}
+                  label={tag}
+                  size="small"
+                  clickable={Boolean(onTagClick)}
+                  onClick={(event) => {
+                    event.stopPropagation()
+                    onTagClick?.(tag)
+                  }}
+                />
               ))}
             </Stack>
           )}
