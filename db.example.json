@@ -1,0 +1,21 @@
+{
+  "tasks": [
+    {
+      "id": "string",
+      "title": "string",
+      "description": "string | null",
+      "status": "todo | inProgress | done",
+      "priority": "low | medium | high",
+      "deadline": "YYYY-MM-DD",
+      "tags": ["string"],
+      "createdAt": "ISO Date String",
+      "updatedAt": "ISO Date String"
+    }
+  ],
+  "tags": [
+    {
+      "id": "string",
+      "name": "string"
+    }
+  ]
+}

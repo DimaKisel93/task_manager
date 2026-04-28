@@ -31,6 +31,17 @@ export const tasksApi = createApi({
       },
       providesTags: ['Tasks'],
     }),
+    updateTaskStatus: builder.mutation<Task, { id: string; status: Task['status'] }>({
+      query: ({ id, status }) => ({
+        url: `/tasks/${id}`,
+        method: 'PATCH',
+        body: {
+          status,
+          updatedAt: new Date().toISOString(),
+        },
+      }),
+      invalidatesTags: ['Tasks'],
+    }),
     getTags: builder.query<Tag[], void>({
       query: () => '/tags',
       providesTags: ['Tags'],
@@ -38,4 +49,4 @@ export const tasksApi = createApi({
   }),
 })
 
-export const { useGetTasksQuery, useGetTagsQuery } = tasksApi
+export const { useGetTasksQuery, useUpdateTaskStatusMutation, useGetTagsQuery } = tasksApi
