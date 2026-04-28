@@ -1,20 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import type { Tag, Task } from '../types/task'
-
-export interface GetTasksParams {
-  page: number
-  limit: number
-}
-
-export interface PaginatedTasks {
-  items: Task[]
-  total: number
-}
-
-interface JsonServerPaginatedResponse {
-  data: Task[]
-  items: number
-}
+import type { GetTasksParams, PaginatedTasks, JsonServerPaginatedResponse } from '../types/tasksApi'
 
 export const tasksApi = createApi({
   reducerPath: 'tasksApi',
@@ -29,6 +15,10 @@ export const tasksApi = createApi({
           total: response.items,
         }
       },
+      providesTags: ['Tasks'],
+    }),
+    getTaskById: builder.query<Task, string>({
+      query: (id) => `/tasks/${id}`,
       providesTags: ['Tasks'],
     }),
     updateTaskStatus: builder.mutation<Task, { id: string; status: Task['status'] }>({
@@ -49,4 +39,9 @@ export const tasksApi = createApi({
   }),
 })
 
-export const { useGetTasksQuery, useUpdateTaskStatusMutation, useGetTagsQuery } = tasksApi
+export const {
+  useGetTasksQuery,
+  useGetTaskByIdQuery,
+  useUpdateTaskStatusMutation,
+  useGetTagsQuery,
+} = tasksApi
