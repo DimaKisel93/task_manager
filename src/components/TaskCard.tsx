@@ -13,7 +13,16 @@ import {
 import type { SelectChangeEvent } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
 import type { Task } from '../types/task'
-import { priorityMap, statusMap } from '../constants/tasks'
+import {
+  TASK_CARD_OVERDUE_TEXT,
+  TASK_CARD_STATUS_LABEL_TEXT,
+  TASK_CARD_CREATED_PREFIX_TEXT,
+  TASK_CARD_DEADLINE_PREFIX_TEXT,
+  TASK_CARD_PRIORITY_PREFIX_TEXT,
+  TASK_CARD_UPDATED_PREFIX_TEXT,
+  priorityMap,
+  statusMap,
+} from '../constants/tasks'
 import { useUpdateTaskStatusMutation } from '../services/tasksApi'
 import { isTaskOverdue } from '../utils/task'
 import { taskCardStyles } from '../constants/taskStyles'
@@ -50,7 +59,7 @@ export function TaskCard({ task, onTagClick }: TaskCardProps) {
           <Stack direction="row" justifyContent="space-between" alignItems="center">
             <Typography variant="h6">{task.title}</Typography>
             <Stack direction="row" spacing={1}>
-              {isOverdue && <Chip label="Overdue" color="error" size="medium" />}
+              {isOverdue && <Chip label={TASK_CARD_OVERDUE_TEXT} color="error" size="medium" />}
               <Chip label={statusMap[task.status].label} color={statusMap[task.status].color} />
             </Stack>
           </Stack>
@@ -64,25 +73,29 @@ export function TaskCard({ task, onTagClick }: TaskCardProps) {
             sx={{ mt: 1, minWidth: 180 }}
             onClick={(event) => event.stopPropagation()}
           >
-            <InputLabel id={`task-status-label-${task.id}`}>Status</InputLabel>
+            <InputLabel id={`task-status-label-${task.id}`}>
+              {TASK_CARD_STATUS_LABEL_TEXT}
+            </InputLabel>
             <Select
               labelId={`task-status-label-${task.id}`}
               value={task.status}
-              label="Status"
+              label={TASK_CARD_STATUS_LABEL_TEXT}
               disabled={isUpdatingStatus}
               onChange={handleStatusChange}
             >
-              <MenuItem value="todo">To Do</MenuItem>
-              <MenuItem value="inProgress">In Progress</MenuItem>
-              <MenuItem value="done">Done</MenuItem>
+              <MenuItem value="todo">{statusMap.todo.label}</MenuItem>
+              <MenuItem value="inProgress">{statusMap.inProgress.label}</MenuItem>
+              <MenuItem value="done">{statusMap.done.label}</MenuItem>
             </Select>
           </FormControl>
           <Stack direction="row" spacing={1} sx={{ mt: 1 }}>
             <Chip
-              label={`Priority: ${priorityMap[task.priority].label}`}
+              label={`${TASK_CARD_PRIORITY_PREFIX_TEXT} ${priorityMap[task.priority].label}`}
               color={priorityMap[task.priority].color}
             />
-            <Chip label={`Deadline: ${new Date(task.deadline).toLocaleDateString()}`} />
+            <Chip
+              label={`${TASK_CARD_DEADLINE_PREFIX_TEXT} ${new Date(task.deadline).toLocaleDateString()}`}
+            />
           </Stack>
           {task.tags.length > 0 && (
             <Stack direction="row" spacing={1} sx={{ mt: 1 }}>
@@ -101,10 +114,10 @@ export function TaskCard({ task, onTagClick }: TaskCardProps) {
             </Stack>
           )}
           <Typography variant="caption" sx={{ mt: 1, color: 'text.secondary', display: 'block' }}>
-            Created: {new Date(task.createdAt).toLocaleString()}
+            {TASK_CARD_CREATED_PREFIX_TEXT} {new Date(task.createdAt).toLocaleString()}
           </Typography>
           <Typography variant="caption" sx={{ color: 'text.secondary', display: 'block' }}>
-            Updated: {new Date(task.updatedAt).toLocaleString()}
+            {TASK_CARD_UPDATED_PREFIX_TEXT} {new Date(task.updatedAt).toLocaleString()}
           </Typography>
         </CardContent>
       </CardActionArea>

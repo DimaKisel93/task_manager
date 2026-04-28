@@ -20,3 +20,21 @@ export const priorityMap: Record<
 
 export const PAGE_SIZE = 5
 export const TASK_STATUS_DONE: TaskStatus = 'done'
+
+export const TASKS_PAGE_LOAD_ERROR_TEXT = 'Failed to load tasks.'
+export const TASKS_PAGE_CLEAR_FILTERS_TEXT = 'Clear'
+export const TASKS_PAGE_ACTIVE_FILTERS_PREFIX_TEXT = 'Active filters:'
+export const TASKS_PAGE_EMPTY_WITH_FILTERS_TEXT = 'No tasks found for selected filters.'
+export const TASKS_PAGE_EMPTY_WITHOUT_FILTERS_TEXT = 'No tasks were found'
+
+export const TASKS_FILTER_STATUS_LABEL_TEXT = 'Status'
+export const TASKS_FILTER_PRIORITY_LABEL_TEXT = 'Priority'
+export const TASKS_FILTER_TAG_LABEL_TEXT = 'Tag'
+export const TASKS_FILTER_ALL_OPTION_TEXT = 'All'
+
+export const TASK_CARD_OVERDUE_TEXT = 'Overdue'
+export const TASK_CARD_STATUS_LABEL_TEXT = 'Status'
+export const TASK_CARD_PRIORITY_PREFIX_TEXT = 'Priority:'
+export const TASK_CARD_DEADLINE_PREFIX_TEXT = 'Deadline:'
+export const TASK_CARD_CREATED_PREFIX_TEXT = 'Created:'
+export const TASK_CARD_UPDATED_PREFIX_TEXT = 'Updated:'

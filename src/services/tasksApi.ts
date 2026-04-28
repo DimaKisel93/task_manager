@@ -2,7 +2,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import type { Tag, Task } from '../types/task'
 import type { GetTasksParams, PaginatedTasks } from '../types/tasksApi'
 import type { FetchBaseQueryMeta } from '@reduxjs/toolkit/query'
-import { extractTotalCount } from '../utils/task'
+import { buildTasksQuery, extractTotalCount } from '../utils/taskApi'
 
 export const tasksApi = createApi({
   reducerPath: 'tasksApi',
@@ -10,16 +10,7 @@ export const tasksApi = createApi({
   tagTypes: ['Tasks', 'Tags'],
   endpoints: (builder) => ({
     getTasks: builder.query<PaginatedTasks, GetTasksParams>({
-      query: ({ page, limit, tag }) => {
-        const params = new URLSearchParams({
-          _page: String(page),
-          _limit: String(limit),
-        })
-        if (tag) {
-          params.append('tags_like', tag)
-        }
-        return `/tasks?${params.toString()}`
-      },
+      query: buildTasksQuery,
       transformResponse: (response: Task[], meta: FetchBaseQueryMeta): PaginatedTasks => ({
         items: response,
         total: extractTotalCount(meta, response.length),

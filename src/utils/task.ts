@@ -1,6 +1,7 @@
-import type { FetchBaseQueryMeta } from '@reduxjs/toolkit/query'
 import { TASK_STATUS_DONE } from '../constants/tasks'
 import type { Task } from '../types/task'
+import { priorityMap, statusMap } from '../constants/tasks'
+import type { ActiveFiltersParams } from '../types/task'
 
 export function isTaskOverdue(task: Task, now = new Date()): boolean {
   if (task.status === TASK_STATUS_DONE) {
@@ -14,11 +15,20 @@ export function isTaskOverdue(task: Task, now = new Date()): boolean {
   return deadlineDate < today
 }
 
-export const extractTotalCount = (
-  meta: FetchBaseQueryMeta | undefined,
-  fallbackLength: number,
-): number => {
-  const totalFromHeader = Number(meta?.response?.headers.get('X-Total-Count'))
-  const total = Number.isNaN(totalFromHeader) ? fallbackLength : totalFromHeader
-  return total
+export const buildActiveFilters = ({ tag, status, priority }: ActiveFiltersParams): string[] => {
+  const result: string[] = []
+
+  if (tag) {
+    result.push(`Tag: ${tag}`)
+  }
+
+  if (status) {
+    result.push(`Status: ${statusMap[status].label}`)
+  }
+
+  if (priority) {
+    result.push(`Priority: ${priorityMap[priority].label}`)
+  }
+
+  return result
 }

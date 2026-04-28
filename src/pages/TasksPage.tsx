@@ -1,16 +1,32 @@
 import { Alert, Button, CircularProgress, Pagination, Stack } from '@mui/material'
-import { useState } from 'react'
-import { useGetTasksQuery } from '../services/tasksApi'
+import { useGetTagsQuery, useGetTasksQuery } from '../services/tasksApi'
 import { TaskCard } from '../components/TaskCard'
-import { PAGE_SIZE } from '../constants/tasks'
+import { TasksFilters } from '../components/TasksFilters'
+import {
+  PAGE_SIZE,
+  TASKS_PAGE_ACTIVE_FILTERS_PREFIX_TEXT,
+  TASKS_PAGE_CLEAR_FILTERS_TEXT,
+  TASKS_PAGE_EMPTY_WITHOUT_FILTERS_TEXT,
+  TASKS_PAGE_EMPTY_WITH_FILTERS_TEXT,
+  TASKS_PAGE_LOAD_ERROR_TEXT,
+} from '../constants/tasks'
+import { useTasksFilters } from '../hooks/useTasksFilters'
+import { buildActiveFilters } from '../utils/task'
 
 export function TasksPage() {
-  const [page, setPage] = useState(1)
-  const [selectedTag, setSelectedTag] = useState<string | null>(null)
+  const {
+    state: { page, tag, status, priority },
+    actions,
+    query,
+  } = useTasksFilters()
+  const { data: tags = [] } = useGetTagsQuery()
+
   const { data, isLoading, isFetching, isError } = useGetTasksQuery({
-    page,
+    page: query.page,
     limit: PAGE_SIZE,
-    tag: selectedTag ?? undefined,
+    tag: query.tag,
+    status: query.status,
+    priority: query.priority,
   })
   const tasks = data?.items ?? []
   const total = data?.total ?? 0
@@ -21,74 +37,59 @@ export function TasksPage() {
   }
 
   if (isError) {
-    return <Alert severity="error">Failed to load tasks.</Alert>
+    return <Alert severity="error">{TASKS_PAGE_LOAD_ERROR_TEXT}</Alert>
   }
 
-  if (tasks.length === 0) {
-    if (selectedTag) {
-      return (
-        <Alert
-          severity="info"
-          action={
-            <Button
-              color="inherit"
-              size="small"
-              onClick={() => {
-                setSelectedTag(null)
-                setPage(1)
-              }}
-            >
-              Clear
-            </Button>
-          }
-        >
-          No tasks found for tag: {selectedTag}
-        </Alert>
-      )
-    }
-
-    return <Alert severity="info">No tasks yet. Create your first one.</Alert>
-  }
+  const activeFilters = buildActiveFilters({
+    tag,
+    status,
+    priority,
+  })
+  const hasFilters = activeFilters.length > 0
 
   return (
     <Stack spacing={2}>
-      {selectedTag && (
+      <TasksFilters
+        selectedStatus={status}
+        selectedPriority={priority}
+        selectedTag={tag}
+        tags={tags}
+        onStatusChange={actions.setStatus}
+        onPriorityChange={actions.setPriority}
+        onTagChange={actions.setTag}
+      />
+
+      {hasFilters && (
         <Alert
           severity="info"
           action={
-            <Button
-              color="inherit"
-              size="small"
-              onClick={() => {
-                setSelectedTag(null)
-                setPage(1)
-              }}
-            >
-              Clear
+            <Button color="inherit" size="small" onClick={actions.resetFilters}>
+              {TASKS_PAGE_CLEAR_FILTERS_TEXT}
             </Button>
           }
         >
-          Filtered by tag: {selectedTag}
+          {TASKS_PAGE_ACTIVE_FILTERS_PREFIX_TEXT} {activeFilters.join(', ')}
         </Alert>
       )}
       {isFetching && <CircularProgress size={24} />}
-      {tasks.map((task) => (
-        <TaskCard
-          key={task.id}
-          task={task}
-          onTagClick={(tag) => {
-            setSelectedTag(tag)
-            setPage(1)
-          }}
-        />
-      ))}
-      <Pagination
-        page={page}
-        count={pageCount}
-        color="primary"
-        sx={{ alignSelf: 'center' }}
-        onChange={(_, value) => setPage(value)}
-      />
+      {tasks.length === 0 ? (
+        <Alert severity="info">
+          {hasFilters ? TASKS_PAGE_EMPTY_WITH_FILTERS_TEXT : TASKS_PAGE_EMPTY_WITHOUT_FILTERS_TEXT}
+        </Alert>
+      ) : (
+        <>
+          {tasks.map((task) => (
+            <TaskCard key={task.id} task={task} onTagClick={actions.setTag} />
+          ))}
+          <Pagination
+            page={page}
+            count={pageCount}
+            color="primary"
+            sx={{ alignSelf: 'center' }}
+            onChange={(_, value) => actions.setPage(value)}
+          />
+        </>
+      )}
     </Stack>
   )
 }
