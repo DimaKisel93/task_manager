@@ -4,6 +4,7 @@ import { emptyToUndefined } from '../utils/helpers'
 
 interface TasksFiltersState {
   page: number
+  search: string
   tag: string | null
   status: TaskStatus | ''
   priority: TaskPriority | ''
@@ -12,6 +13,7 @@ interface TasksFiltersState {
 export function useTasksFilters() {
   const [state, setState] = useState<TasksFiltersState>({
     page: 1,
+    search: '',
     tag: null,
     status: '',
     priority: '',
@@ -24,6 +26,13 @@ export function useTasksFilters() {
     setState((prev) => ({
       ...prev,
       tag,
+      page: 1,
+    }))
+
+  const setSearch = (search: string) =>
+    setState((prev) => ({
+      ...prev,
+      search,
       page: 1,
     }))
 
@@ -44,6 +53,7 @@ export function useTasksFilters() {
   const resetFilters = () =>
     setState((prev) => ({
       ...prev,
+      search: '',
       tag: null,
       status: '',
       priority: '',
@@ -55,6 +65,7 @@ export function useTasksFilters() {
     actions: {
       setPage,
       goToFirstPage,
+      setSearch,
       setTag,
       setStatus,
       setPriority,
@@ -62,6 +73,7 @@ export function useTasksFilters() {
     },
     query: {
       page: state.page,
+      search: emptyToUndefined(state.search.trim()),
       tag: emptyToUndefined(state.tag),
       status: emptyToUndefined(state.status),
       priority: emptyToUndefined(state.priority),

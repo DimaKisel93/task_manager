@@ -15,8 +15,12 @@ export function isTaskOverdue(task: Task, now = new Date()): boolean {
   return deadlineDate < today
 }
 
-export const buildActiveFilters = ({ tag, status, priority }: ActiveFiltersParams): string[] => {
+export const buildActiveFilters = ({ search, tag, status, priority }: ActiveFiltersParams): string[] => {
   const result: string[] = []
+
+  if (search) {
+    result.push(`Search: ${search}`)
+  }
 
   if (tag) {
     result.push(`Tag: ${tag}`)

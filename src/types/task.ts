@@ -19,6 +19,7 @@ export interface Tag {
 }
 
 export interface ActiveFiltersParams {
+  search: string
   tag: string | null
   status: TaskStatus | ''
   priority: TaskPriority | ''

@@ -10,11 +10,22 @@ export const extractTotalCount = (
   return total
 }
 
-export const buildTasksQuery = ({ page, limit, tag, status, priority }: GetTasksParams): string => {
+export const buildTasksQuery = ({
+  page,
+  limit,
+  search,
+  tag,
+  status,
+  priority,
+}: GetTasksParams): string => {
   const params = new URLSearchParams({
     _page: String(page),
     _limit: String(limit),
   })
+
+  if (search) {
+    params.set('title_like', search)
+  }
 
   if (status) {
     params.set('status', status)

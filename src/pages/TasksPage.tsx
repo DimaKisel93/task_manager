@@ -15,7 +15,7 @@ import { buildActiveFilters } from '../utils/task'
 
 export function TasksPage() {
   const {
-    state: { page, tag, status, priority },
+    state: { page, search, tag, status, priority },
     actions,
     query,
   } = useTasksFilters()
@@ -24,6 +24,7 @@ export function TasksPage() {
   const { data, isLoading, isFetching, isError } = useGetTasksQuery({
     page: query.page,
     limit: PAGE_SIZE,
+    search: query.search,
     tag: query.tag,
     status: query.status,
     priority: query.priority,
@@ -41,6 +42,7 @@ export function TasksPage() {
   }
 
   const activeFilters = buildActiveFilters({
+    search,
     tag,
     status,
     priority,
@@ -50,10 +52,12 @@ export function TasksPage() {
   return (
     <Stack spacing={2}>
       <TasksFilters
+        search={search}
         selectedStatus={status}
         selectedPriority={priority}
         selectedTag={tag}
         tags={tags}
+        onSearchChange={actions.setSearch}
         onStatusChange={actions.setStatus}
         onPriorityChange={actions.setPriority}
         onTagChange={actions.setTag}

@@ -2,6 +2,8 @@ import { MenuItem, Stack, TextField } from '@mui/material'
 import {
   TASKS_FILTER_ALL_OPTION_TEXT,
   TASKS_FILTER_PRIORITY_LABEL_TEXT,
+  TASKS_FILTER_SEARCH_LABEL_TEXT,
+  TASKS_FILTER_SEARCH_PLACEHOLDER_TEXT,
   TASKS_FILTER_STATUS_LABEL_TEXT,
   TASKS_FILTER_TAG_LABEL_TEXT,
   priorityMap,
@@ -10,26 +12,38 @@ import {
 import type { Tag, TaskPriority, TaskStatus } from '../types/task'
 
 interface TasksFiltersProps {
+  search: string
   selectedStatus: TaskStatus | ''
   selectedPriority: TaskPriority | ''
   selectedTag: string | null
   tags: Tag[]
+  onSearchChange: (search: string) => void
   onStatusChange: (status: TaskStatus | '') => void
   onPriorityChange: (priority: TaskPriority | '') => void
   onTagChange: (tag: string | null) => void
 }
 
 export function TasksFilters({
+  search,
   selectedStatus,
   selectedPriority,
   selectedTag,
   tags,
+  onSearchChange,
   onStatusChange,
   onPriorityChange,
   onTagChange,
 }: TasksFiltersProps) {
   return (
     <Stack direction={{ xs: 'column', md: 'row' }} spacing={2}>
+      <TextField
+        label={TASKS_FILTER_SEARCH_LABEL_TEXT}
+        placeholder={TASKS_FILTER_SEARCH_PLACEHOLDER_TEXT}
+        value={search}
+        onChange={(event) => onSearchChange(event.target.value)}
+        sx={{ minWidth: 240 }}
+      />
+
       <TextField
         select
         label={TASKS_FILTER_STATUS_LABEL_TEXT}
