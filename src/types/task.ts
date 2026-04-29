@@ -20,7 +20,9 @@ export interface Tag {
 
 export interface ActiveFiltersParams {
   search: string
+  sortBy: null | 'createdAt' | 'deadline'
+  sortOrder: 'asc' | 'desc'
   tag: string | null
-  status: TaskStatus | ''
-  priority: TaskPriority | ''
+  status: TaskStatus | null
+  priority: TaskPriority | null
 }

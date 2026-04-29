@@ -14,6 +14,8 @@ export const buildTasksQuery = ({
   page,
   limit,
   search,
+  sortBy,
+  sortOrder,
   tag,
   status,
   priority,
@@ -25,6 +27,11 @@ export const buildTasksQuery = ({
 
   if (search) {
     params.set('title_like', search)
+  }
+
+  if (sortBy) {
+    params.set('_sort', sortBy)
+    params.set('_order', sortOrder ?? 'asc')
   }
 
   if (status) {

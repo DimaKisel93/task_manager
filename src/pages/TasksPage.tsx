@@ -1,7 +1,14 @@
-import { Alert, Button, CircularProgress, Pagination, Stack } from '@mui/material'
+import {
+  Alert,
+  Button,
+  CircularProgress,
+  Pagination,
+  Stack,
+} from '@mui/material'
 import { useGetTagsQuery, useGetTasksQuery } from '../services/tasksApi'
 import { TaskCard } from '../components/TaskCard'
 import { TasksFilters } from '../components/TasksFilters'
+import { TasksSortBar } from '../components/TasksSortBar'
 import {
   PAGE_SIZE,
   TASKS_PAGE_ACTIVE_FILTERS_PREFIX_TEXT,
@@ -15,7 +22,7 @@ import { buildActiveFilters } from '../utils/task'
 
 export function TasksPage() {
   const {
-    state: { page, search, tag, status, priority },
+    state: { page, search, sortBy, sortOrder, tag, status, priority },
     actions,
     query,
   } = useTasksFilters()
@@ -25,6 +32,8 @@ export function TasksPage() {
     page: query.page,
     limit: PAGE_SIZE,
     search: query.search,
+    sortBy: query.sortBy,
+    sortOrder: query.sortOrder,
     tag: query.tag,
     status: query.status,
     priority: query.priority,
@@ -43,6 +52,8 @@ export function TasksPage() {
 
   const activeFilters = buildActiveFilters({
     search,
+    sortBy,
+    sortOrder,
     tag,
     status,
     priority,
@@ -61,6 +72,13 @@ export function TasksPage() {
         onStatusChange={actions.setStatus}
         onPriorityChange={actions.setPriority}
         onTagChange={actions.setTag}
+      />
+
+      <TasksSortBar
+        sortBy={sortBy}
+        sortOrder={sortOrder}
+        onSortByChange={actions.setSortBy}
+        onSortOrderChange={actions.setSortOrder}
       />
 
       {hasFilters && (

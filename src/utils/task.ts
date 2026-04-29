@@ -1,6 +1,13 @@
 import { TASK_STATUS_DONE } from '../constants/tasks'
 import type { Task } from '../types/task'
-import { priorityMap, statusMap } from '../constants/tasks'
+import {
+  priorityMap,
+  statusMap,
+  TASKS_FILTER_SORT_ASC_TEXT,
+  TASKS_FILTER_SORT_CREATED_AT_TEXT,
+  TASKS_FILTER_SORT_DEADLINE_TEXT,
+  TASKS_FILTER_SORT_DESC_TEXT,
+} from '../constants/tasks'
 import type { ActiveFiltersParams } from '../types/task'
 
 export function isTaskOverdue(task: Task, now = new Date()): boolean {
@@ -15,11 +22,26 @@ export function isTaskOverdue(task: Task, now = new Date()): boolean {
   return deadlineDate < today
 }
 
-export const buildActiveFilters = ({ search, tag, status, priority }: ActiveFiltersParams): string[] => {
+export const buildActiveFilters = ({
+  search,
+  sortBy,
+  sortOrder,
+  tag,
+  status,
+  priority,
+}: ActiveFiltersParams): string[] => {
   const result: string[] = []
 
   if (search) {
     result.push(`Search: ${search}`)
+  }
+
+  if (sortBy) {
+    const sortByLabel =
+      sortBy === 'createdAt' ? TASKS_FILTER_SORT_CREATED_AT_TEXT : TASKS_FILTER_SORT_DEADLINE_TEXT
+    const orderLabel = sortOrder === 'asc' ? TASKS_FILTER_SORT_ASC_TEXT : TASKS_FILTER_SORT_DESC_TEXT
+
+    result.push(`Sort: ${sortByLabel} (${orderLabel})`)
   }
 
   if (tag) {

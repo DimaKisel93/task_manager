@@ -10,16 +10,17 @@ import {
   statusMap,
 } from '../constants/tasks'
 import type { Tag, TaskPriority, TaskStatus } from '../types/task'
+import { fromSelectValue, toSelectValue } from '../utils/helpers'
 
 interface TasksFiltersProps {
   search: string
-  selectedStatus: TaskStatus | ''
-  selectedPriority: TaskPriority | ''
+  selectedStatus: TaskStatus | null
+  selectedPriority: TaskPriority | null
   selectedTag: string | null
   tags: Tag[]
   onSearchChange: (search: string) => void
-  onStatusChange: (status: TaskStatus | '') => void
-  onPriorityChange: (priority: TaskPriority | '') => void
+  onStatusChange: (status: TaskStatus | null) => void
+  onPriorityChange: (priority: TaskPriority | null) => void
   onTagChange: (tag: string | null) => void
 }
 
@@ -47,8 +48,8 @@ export function TasksFilters({
       <TextField
         select
         label={TASKS_FILTER_STATUS_LABEL_TEXT}
-        value={selectedStatus}
-        onChange={(event) => onStatusChange(event.target.value as TaskStatus | '')}
+        value={toSelectValue(selectedStatus)}
+        onChange={(event) => onStatusChange(fromSelectValue(event.target.value as TaskStatus | ''))}
         sx={{ minWidth: 180 }}
       >
         <MenuItem value="">{TASKS_FILTER_ALL_OPTION_TEXT}</MenuItem>
@@ -60,8 +61,10 @@ export function TasksFilters({
       <TextField
         select
         label={TASKS_FILTER_PRIORITY_LABEL_TEXT}
-        value={selectedPriority}
-        onChange={(event) => onPriorityChange(event.target.value as TaskPriority | '')}
+        value={toSelectValue(selectedPriority)}
+        onChange={(event) =>
+          onPriorityChange(fromSelectValue(event.target.value as TaskPriority | ''))
+        }
         sx={{ minWidth: 180 }}
       >
         <MenuItem value="">{TASKS_FILTER_ALL_OPTION_TEXT}</MenuItem>

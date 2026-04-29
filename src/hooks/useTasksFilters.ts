@@ -1,22 +1,27 @@
 import { useState } from 'react'
 import type { TaskPriority, TaskStatus } from '../types/task'
 import { emptyToUndefined } from '../utils/helpers'
+import type { TasksSortBy, TasksSortOrder } from '../types/tasksApi'
 
 interface TasksFiltersState {
   page: number
   search: string
+  sortBy: TasksSortBy | null
+  sortOrder: TasksSortOrder
   tag: string | null
-  status: TaskStatus | ''
-  priority: TaskPriority | ''
+  status: TaskStatus | null
+  priority: TaskPriority | null
 }
 
 export function useTasksFilters() {
   const [state, setState] = useState<TasksFiltersState>({
     page: 1,
     search: '',
+    sortBy: null,
+    sortOrder: 'asc',
     tag: null,
-    status: '',
-    priority: '',
+    status: null,
+    priority: null,
   })
 
   const setPage = (page: number) => setState((prev) => ({ ...prev, page }))
@@ -36,14 +41,28 @@ export function useTasksFilters() {
       page: 1,
     }))
 
-  const setStatus = (status: TaskStatus | '') =>
+  const setSortBy = (sortBy: TasksSortBy | null) =>
+    setState((prev) => ({
+      ...prev,
+      sortBy,
+      page: 1,
+    }))
+
+  const setSortOrder = (sortOrder: TasksSortOrder) =>
+    setState((prev) => ({
+      ...prev,
+      sortOrder,
+      page: 1,
+    }))
+
+  const setStatus = (status: TaskStatus | null) =>
     setState((prev) => ({
       ...prev,
       status,
       page: 1,
     }))
 
-  const setPriority = (priority: TaskPriority | '') =>
+  const setPriority = (priority: TaskPriority | null) =>
     setState((prev) => ({
       ...prev,
       priority,
@@ -54,9 +73,11 @@ export function useTasksFilters() {
     setState((prev) => ({
       ...prev,
       search: '',
+      sortBy: null,
+      sortOrder: 'asc',
       tag: null,
-      status: '',
-      priority: '',
+      status: null,
+      priority: null,
       page: 1,
     }))
 
@@ -66,6 +87,8 @@ export function useTasksFilters() {
       setPage,
       goToFirstPage,
       setSearch,
+      setSortBy,
+      setSortOrder,
       setTag,
       setStatus,
       setPriority,
@@ -74,6 +97,8 @@ export function useTasksFilters() {
     query: {
       page: state.page,
       search: emptyToUndefined(state.search.trim()),
+      sortBy: emptyToUndefined(state.sortBy),
+      sortOrder: state.sortBy ? state.sortOrder : undefined,
       tag: emptyToUndefined(state.tag),
       status: emptyToUndefined(state.status),
       priority: emptyToUndefined(state.priority),
