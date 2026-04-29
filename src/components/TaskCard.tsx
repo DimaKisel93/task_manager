@@ -54,7 +54,7 @@ export function TaskCard({ task, onTagClick }: TaskCardProps) {
         ...(isOverdue && taskCardStyles.overdue),
       }}
     >
-      <CardActionArea onClick={() => navigate(`/tasks/${task.id}`)}>
+      <CardActionArea onClick={() => navigate(`/task/${task.id}`)}>
         <CardContent>
           <Stack direction="row" justifyContent="space-between" alignItems="center">
             <Typography variant="h6">{task.title}</Typography>

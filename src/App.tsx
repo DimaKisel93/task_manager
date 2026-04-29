@@ -20,7 +20,7 @@ function App() {
       <Container maxWidth="md" sx={{ py: 4 }}>
         <Routes>
           <Route path="/" element={<TasksPage />} />
-          <Route path="/tasks/:taskId" element={<TaskDetailsPage />} />
+          <Route path="/task/:taskId" element={<TaskDetailsPage />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </Container>
