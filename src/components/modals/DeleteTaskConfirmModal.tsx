@@ -1,5 +1,6 @@
-import { Button, DialogContentText } from '@mui/material'
+import { DialogContentText } from '@mui/material'
 import { BaseModal } from './BaseModal'
+import { FormModalActions } from './FormModalActions'
 
 interface DeleteTaskConfirmModalProps {
   open: boolean
@@ -27,14 +28,14 @@ export function DeleteTaskConfirmModal({
         </DialogContentText>
       }
       actions={
-        <>
-          <Button onClick={onClose} disabled={isDeleting}>
-            Cancel
-          </Button>
-          <Button color="error" variant="contained" disabled={isDeleting} onClick={onConfirm}>
-            Delete
-          </Button>
-        </>
+        <FormModalActions
+          cancelText="Cancel"
+          submitText="Delete"
+          onCancel={onClose}
+          isSubmitting={isDeleting}
+          onConfirm={onConfirm}
+          confirmColor="error"
+        />
       }
     />
   )

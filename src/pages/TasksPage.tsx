@@ -1,4 +1,4 @@
-import { Alert, Button, CircularProgress, Pagination, Stack } from '@mui/material'
+import { Alert, Pagination, Stack } from '@mui/material'
 import { useState } from 'react'
 import { useGetTagsQuery, useGetTasksQuery } from '../services/tasksApi'
 import { TaskCard } from '../components/tasks/TaskCard'
@@ -17,6 +17,8 @@ import {
 import { tasksPageStyles } from '../constants/styles'
 import { useTasksFilters } from '../hooks/useTasksFilters'
 import { buildActiveFilters } from '../utils/task'
+import { AppButton, EmptyState, ErrorState, LoadingState } from '../components/ui'
+import { PageHeaderActions } from '../components/layout/PageHeaderActions'
 
 export function TasksPage() {
   const [isFormOpen, setIsFormOpen] = useState(false)
@@ -42,11 +44,11 @@ export function TasksPage() {
   const pageCount = Math.max(1, Math.ceil(total / PAGE_SIZE))
 
   if (isLoading) {
-    return <CircularProgress />
+    return <LoadingState />
   }
 
   if (isError) {
-    return <Alert severity="error">{TASKS_PAGE_LOAD_ERROR_TEXT}</Alert>
+    return <ErrorState message={TASKS_PAGE_LOAD_ERROR_TEXT} />
   }
 
   const activeFilters = buildActiveFilters({
@@ -61,11 +63,13 @@ export function TasksPage() {
 
   return (
     <Stack spacing={2}>
-      <Stack direction="row" justifyContent="flex-end">
-        <Button variant="contained" onClick={() => setIsFormOpen(true)}>
-          {TASKS_PAGE_NEW_TASK_TEXT}
-        </Button>
-      </Stack>
+      <PageHeaderActions
+        right={
+          <AppButton variant="contained" onClick={() => setIsFormOpen(true)}>
+            {TASKS_PAGE_NEW_TASK_TEXT}
+          </AppButton>
+        }
+      />
 
       <TasksFilters
         search={search}
@@ -90,19 +94,19 @@ export function TasksPage() {
         <Alert
           severity="info"
           action={
-            <Button color="inherit" size="small" onClick={actions.resetFilters}>
+            <AppButton color="inherit" size="small" onClick={actions.resetFilters}>
               {TASKS_PAGE_CLEAR_FILTERS_TEXT}
-            </Button>
+            </AppButton>
           }
         >
           {TASKS_PAGE_ACTIVE_FILTERS_PREFIX_TEXT} {activeFilters.join(', ')}
         </Alert>
       )}
-      {isFetching && <CircularProgress size={24} />}
+      {isFetching && <LoadingState size={24} />}
       {tasks.length === 0 ? (
-        <Alert severity="info">
-          {hasFilters ? TASKS_PAGE_EMPTY_WITH_FILTERS_TEXT : TASKS_PAGE_EMPTY_WITHOUT_FILTERS_TEXT}
-        </Alert>
+        <EmptyState
+          message={hasFilters ? TASKS_PAGE_EMPTY_WITH_FILTERS_TEXT : TASKS_PAGE_EMPTY_WITHOUT_FILTERS_TEXT}
+        />
       ) : (
         <>
           {tasks.map((task) => (

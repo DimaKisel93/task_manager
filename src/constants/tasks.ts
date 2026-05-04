@@ -1,6 +1,6 @@
 import type { TaskStatus, TaskPriority } from '../types/task'
 
-export const statusMap: Record<
+export const STATUS_MAP: Record<
   TaskStatus,
   { label: string; color: 'default' | 'warning' | 'success' }
 > = {
@@ -9,7 +9,7 @@ export const statusMap: Record<
   done: { label: 'Выполнено', color: 'success' },
 }
 
-export const priorityMap: Record<
+export const PRIORITY_MAP: Record<
   TaskPriority,
   { label: string; color: 'success' | 'warning' | 'error' }
 > = {
@@ -20,7 +20,8 @@ export const priorityMap: Record<
 
 export const PAGE_SIZE = 5
 export const TASK_STATUS_DONE: TaskStatus = 'done'
-export const FORM_ID = 'task-form'
+export const FORM_ID = 'taskForm'
+export const TASK_FORM_PRIORITY_LABEL_ID = 'taskFormPriorityLabel'
 
 export const TASKS_PAGE_LOAD_ERROR_TEXT = 'Не удалось загрузить задачи.'
 export const TASKS_PAGE_CLEAR_FILTERS_TEXT = 'Очистить'
@@ -62,3 +63,17 @@ export const TASK_FORM_CANCEL_TEXT = 'Отменить'
 export const TASK_FORM_ERROR_GENERIC_TEXT = 'Что-то пошло не так. Пожалуйста, попробуйте снова.'
 export const TASKS_PAGE_NEW_TASK_TEXT = 'Новая задача'
 export const TASK_DETAILS_EDIT_TEXT = 'Редактировать'
+
+export const STATUS_OPTIONS = [
+  { value: '', label: TASKS_FILTER_ALL_OPTION_TEXT },
+  { value: 'todo', label: STATUS_MAP.todo.label },
+  { value: 'inProgress', label: STATUS_MAP.inProgress.label },
+  { value: 'done', label: STATUS_MAP.done.label },
+]
+
+export const PRIORITY_OPTIONS = [
+  { value: '', label: TASKS_FILTER_ALL_OPTION_TEXT },
+  { value: 'low', label: PRIORITY_MAP.low.label },
+  { value: 'medium', label: PRIORITY_MAP.medium.label },
+  { value: 'high', label: PRIORITY_MAP.high.label },
+]

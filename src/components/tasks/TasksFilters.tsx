@@ -1,17 +1,19 @@
-import { MenuItem, Stack, TextField } from '@mui/material'
+import { Stack } from '@mui/material'
 import {
+  PRIORITY_OPTIONS,
+  STATUS_OPTIONS,
   TASKS_FILTER_ALL_OPTION_TEXT,
   TASKS_FILTER_PRIORITY_LABEL_TEXT,
   TASKS_FILTER_SEARCH_LABEL_TEXT,
   TASKS_FILTER_SEARCH_PLACEHOLDER_TEXT,
   TASKS_FILTER_STATUS_LABEL_TEXT,
   TASKS_FILTER_TAG_LABEL_TEXT,
-  priorityMap,
-  statusMap,
 } from '../../constants/tasks'
 import { tasksFiltersStyles } from '../../constants/styles'
 import type { Tag, TaskPriority, TaskStatus } from '../../types/task'
 import { fromSelectValue, toSelectValue } from '../../utils/helpers'
+import { SearchField, SelectField } from '../ui'
+import { useMemo } from 'react'
 
 interface TasksFiltersProps {
   search: string
@@ -36,58 +38,46 @@ export function TasksFilters({
   onPriorityChange,
   onTagChange,
 }: TasksFiltersProps) {
+  const tagOptions = useMemo(
+    () => [
+      { value: '', label: TASKS_FILTER_ALL_OPTION_TEXT },
+      ...tags.map((tag) => ({ value: tag.name, label: tag.name })),
+    ],
+    [tags],
+  )
   return (
     <Stack direction={{ xs: 'column', md: 'row' }} spacing={2}>
-      <TextField
+      <SearchField
         label={TASKS_FILTER_SEARCH_LABEL_TEXT}
         placeholder={TASKS_FILTER_SEARCH_PLACEHOLDER_TEXT}
         value={search}
-        onChange={(event) => onSearchChange(event.target.value)}
+        onChange={onSearchChange}
         sx={tasksFiltersStyles.search}
       />
 
-      <TextField
-        select
+      <SelectField
         label={TASKS_FILTER_STATUS_LABEL_TEXT}
         value={toSelectValue(selectedStatus)}
-        onChange={(event) => onStatusChange(fromSelectValue(event.target.value as TaskStatus | ''))}
+        onChange={(value) => onStatusChange(fromSelectValue(value as TaskStatus | ''))}
         sx={tasksFiltersStyles.select}
-      >
-        <MenuItem value="">{TASKS_FILTER_ALL_OPTION_TEXT}</MenuItem>
-        <MenuItem value="todo">{statusMap.todo.label}</MenuItem>
-        <MenuItem value="inProgress">{statusMap.inProgress.label}</MenuItem>
-        <MenuItem value="done">{statusMap.done.label}</MenuItem>
-      </TextField>
+        options={STATUS_OPTIONS}
+      />
 
-      <TextField
-        select
+      <SelectField
         label={TASKS_FILTER_PRIORITY_LABEL_TEXT}
         value={toSelectValue(selectedPriority)}
-        onChange={(event) =>
-          onPriorityChange(fromSelectValue(event.target.value as TaskPriority | ''))
-        }
+        onChange={(value) => onPriorityChange(fromSelectValue(value as TaskPriority | ''))}
         sx={tasksFiltersStyles.select}
-      >
-        <MenuItem value="">{TASKS_FILTER_ALL_OPTION_TEXT}</MenuItem>
-        <MenuItem value="low">{priorityMap.low.label}</MenuItem>
-        <MenuItem value="medium">{priorityMap.medium.label}</MenuItem>
-        <MenuItem value="high">{priorityMap.high.label}</MenuItem>
-      </TextField>
+        options={PRIORITY_OPTIONS}
+      />
 
-      <TextField
-        select
+      <SelectField
         label={TASKS_FILTER_TAG_LABEL_TEXT}
         value={selectedTag ?? ''}
-        onChange={(event) => onTagChange(event.target.value || null)}
+        onChange={(value) => onTagChange(value || null)}
         sx={tasksFiltersStyles.select}
-      >
-        <MenuItem value="">{TASKS_FILTER_ALL_OPTION_TEXT}</MenuItem>
-        {tags.map((tag) => (
-          <MenuItem key={tag.id} value={tag.name}>
-            {tag.name}
-          </MenuItem>
-        ))}
-      </TextField>
+        options={tagOptions}
+      />
     </Stack>
   )
 }

@@ -1,4 +1,4 @@
-import { Alert, Button, CircularProgress, Stack } from '@mui/material'
+import { Alert, Button, Stack } from '@mui/material'
 import { useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { TaskCard } from '../components/tasks/TaskCard'
@@ -6,6 +6,8 @@ import { DeleteTaskConfirmModal } from '../components/modals/DeleteTaskConfirmMo
 import { TaskFormModal } from '../components/modals/TaskFormModal'
 import { TASK_DETAILS_EDIT_TEXT } from '../constants/tasks'
 import { useDeleteTaskMutation, useGetTaskByIdQuery } from '../services/tasksApi'
+import { ErrorState, LoadingState } from '../components/ui'
+import { PageHeaderActions } from '../components/layout/PageHeaderActions'
 
 export function TaskDetailsPage() {
   const { taskId } = useParams<{ taskId: string }>()
@@ -26,11 +28,11 @@ export function TaskDetailsPage() {
   }
 
   if (isLoading) {
-    return <CircularProgress />
+    return <LoadingState />
   }
 
   if (isError || !task) {
-    return <Alert severity="error">Task not found.</Alert>
+    return <ErrorState message="Task not found." />
   }
 
   const handleDeleteTask = () => {
@@ -45,19 +47,23 @@ export function TaskDetailsPage() {
 
   return (
     <Stack spacing={2}>
-      <Stack direction="row" spacing={2} justifyContent="space-between" alignItems="center">
-        <Button component={Link} to="/" variant="outlined">
-          Вернуться к задачам
-        </Button>
-        <Stack direction="row" spacing={1}>
-          <Button variant="contained" onClick={() => setIsEditOpen(true)}>
-            {TASK_DETAILS_EDIT_TEXT}
+      <PageHeaderActions
+        left={
+          <Button component={Link} to="/" variant="outlined">
+            Вернуться к задачам
           </Button>
-          <Button color="error" variant="contained" onClick={() => setIsDeleteOpen(true)}>
-            Удалить
-          </Button>
-        </Stack>
-      </Stack>
+        }
+        right={
+          <>
+            <Button variant="contained" onClick={() => setIsEditOpen(true)}>
+              {TASK_DETAILS_EDIT_TEXT}
+            </Button>
+            <Button color="error" variant="contained" onClick={() => setIsDeleteOpen(true)}>
+              Удалить
+            </Button>
+          </>
+        }
+      />
 
       {isDeleteError && <Alert severity="error">Failed to delete task.</Alert>}
       <TaskCard task={task} />

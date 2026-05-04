@@ -5,16 +5,15 @@ import {
   TASK_CARD_OVERDUE_TEXT,
   TASK_CARD_CREATED_PREFIX_TEXT,
   TASK_CARD_DEADLINE_PREFIX_TEXT,
-  TASK_CARD_PRIORITY_PREFIX_TEXT,
   TASK_CARD_UPDATED_PREFIX_TEXT,
-  priorityMap,
-  statusMap,
 } from '../../constants/tasks'
 import { useUpdateTaskStatusMutation } from '../../services/tasksApi'
 import { isTaskOverdue } from '../../utils/task'
 import { taskCardStyles } from '../../constants/styles'
 import { TaskStatusSelect } from './TaskStatusSelect'
 import { TaskTags } from './TaskTags '
+import { StatusBadge } from './StatusBadge'
+import { PriorityBadge } from './PriorityBadge'
 
 interface TaskCardProps {
   task: Task
@@ -43,12 +42,11 @@ export function TaskCard({ task, onTagClick }: TaskCardProps) {
             <Typography variant="h6">{task.title}</Typography>
             <Stack direction="row" spacing={1}>
               <TaskStatusSelect
-                taskId={task.id}
                 status={task.status}
                 disabled={isUpdatingStatus}
                 onStatusChange={handleStatusChange}
               />
-              <Chip label={statusMap[task.status].label} color={statusMap[task.status].color} />
+              <StatusBadge status={task.status} />
             </Stack>
           </Stack>
           <Stack direction="row" justifyContent="space-between" alignItems="center">
@@ -63,10 +61,7 @@ export function TaskCard({ task, onTagClick }: TaskCardProps) {
           </Stack>
 
           <Stack direction="row" spacing={1} sx={taskCardStyles.chipsRow}>
-            <Chip
-              label={`${TASK_CARD_PRIORITY_PREFIX_TEXT} ${priorityMap[task.priority].label}`}
-              color={priorityMap[task.priority].color}
-            />
+            <PriorityBadge priority={task.priority} />
             <Chip
               label={`${TASK_CARD_DEADLINE_PREFIX_TEXT} ${new Date(task.deadline).toLocaleDateString()}`}
             />

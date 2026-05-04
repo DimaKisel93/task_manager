@@ -1,8 +1,8 @@
 import { TASK_STATUS_DONE } from '../constants/tasks'
 import type { Task } from '../types/task'
 import {
-  priorityMap,
-  statusMap,
+  PRIORITY_MAP,
+  STATUS_MAP,
   TASKS_FILTER_SORT_ASC_TEXT,
   TASKS_FILTER_SORT_CREATED_AT_TEXT,
   TASKS_FILTER_SORT_DEADLINE_TEXT,
@@ -51,11 +51,11 @@ export const buildActiveFilters = ({
   }
 
   if (status) {
-    result.push(`Status: ${statusMap[status].label}`)
+    result.push(`Status: ${STATUS_MAP[status].label}`)
   }
 
   if (priority) {
-    result.push(`Priority: ${priorityMap[priority].label}`)
+    result.push(`Priority: ${PRIORITY_MAP[priority].label}`)
   }
 
   return result

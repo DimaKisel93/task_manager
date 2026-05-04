@@ -2,19 +2,14 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import {
   Alert,
   Autocomplete,
-  Button,
   FormControl,
   FormControlLabel,
   FormHelperText,
   FormLabel,
-  InputLabel,
-  MenuItem,
   Radio,
   RadioGroup,
-  Select,
   Stack,
   TextField,
-  type SelectChangeEvent,
 } from '@mui/material'
 import { useEffect } from 'react'
 import { Controller, useForm } from 'react-hook-form'
@@ -32,8 +27,9 @@ import {
   TASK_FORM_SUBMIT_SAVE_TEXT,
   TASK_FORM_TAGS_LABEL_TEXT,
   TASK_FORM_TITLE_LABEL_TEXT,
-  priorityMap,
-  statusMap,
+  PRIORITY_MAP,
+  STATUS_MAP,
+  TASK_FORM_PRIORITY_LABEL_ID,
 } from '../../constants/tasks'
 import { taskFormSchema, type TaskFormValues } from '../../schemas/taskFormSchema'
 import {
@@ -45,6 +41,8 @@ import type { Task } from '../../types/task'
 import { taskFormModalStyles } from '../../constants/styles'
 import { BaseModal } from './BaseModal'
 import { defaultValues, normalizeTags } from '../../utils/task'
+import { SelectField } from '../ui'
+import { FormModalActions } from './FormModalActions'
 
 interface TaskFormModalProps {
   open: boolean
@@ -156,17 +154,17 @@ export function TaskFormModal({ open, task, onClose }: TaskFormModalProps) {
             control={control}
             render={({ field }) => (
               <FormControl fullWidth error={Boolean(errors.status)}>
-                <InputLabel id="task-form-status-label">{TASK_FORM_STATUS_LABEL_TEXT}</InputLabel>
-                <Select
-                  value={field.value}
-                  labelId="task-form-status-label"
+                <SelectField
                   label={TASK_FORM_STATUS_LABEL_TEXT}
-                  onChange={(e: SelectChangeEvent) => field.onChange(e.target.value)}
-                >
-                  <MenuItem value="todo">{statusMap.todo.label}</MenuItem>
-                  <MenuItem value="inProgress">{statusMap.inProgress.label}</MenuItem>
-                  <MenuItem value="done">{statusMap.done.label}</MenuItem>
-                </Select>
+                  value={field.value}
+                  fullWidth
+                  onChange={(value) => field.onChange(value)}
+                  options={[
+                    { value: 'todo', label: STATUS_MAP.todo.label },
+                    { value: 'inProgress', label: STATUS_MAP.inProgress.label },
+                    { value: 'done', label: STATUS_MAP.done.label },
+                  ]}
+                />
                 {errors.status && <FormHelperText>{errors.status.message}</FormHelperText>}
               </FormControl>
             )}
@@ -176,23 +174,29 @@ export function TaskFormModal({ open, task, onClose }: TaskFormModalProps) {
             control={control}
             render={({ field }) => (
               <FormControl error={Boolean(errors.priority)}>
-                <FormLabel id="task-form-priority-label">{TASK_FORM_PRIORITY_LABEL_TEXT}</FormLabel>
+                <FormLabel id={TASK_FORM_PRIORITY_LABEL_ID}>
+                  {TASK_FORM_PRIORITY_LABEL_TEXT}
+                </FormLabel>
                 <RadioGroup
                   value={field.value}
                   onChange={(e) => field.onChange(e.target.value)}
-                  aria-labelledby="task-form-priority-label"
+                  aria-labelledby={TASK_FORM_PRIORITY_LABEL_ID}
                   row
                 >
-                  <FormControlLabel value="low" control={<Radio />} label={priorityMap.low.label} />
+                  <FormControlLabel
+                    value="low"
+                    control={<Radio />}
+                    label={PRIORITY_MAP.low.label}
+                  />
                   <FormControlLabel
                     value="medium"
                     control={<Radio />}
-                    label={priorityMap.medium.label}
+                    label={PRIORITY_MAP.medium.label}
                   />
                   <FormControlLabel
                     value="high"
                     control={<Radio />}
-                    label={priorityMap.high.label}
+                    label={PRIORITY_MAP.high.label}
                   />
                 </RadioGroup>
                 {errors.priority && <FormHelperText>{errors.priority.message}</FormHelperText>}
@@ -239,14 +243,13 @@ export function TaskFormModal({ open, task, onClose }: TaskFormModalProps) {
         </Stack>
       }
       actions={
-        <>
-          <Button onClick={onClose} disabled={isSubmitting}>
-            {TASK_FORM_CANCEL_TEXT}
-          </Button>
-          <Button type="submit" form={FORM_ID} variant="contained" disabled={isSubmitting}>
-            {isEdit ? TASK_FORM_SUBMIT_SAVE_TEXT : TASK_FORM_SUBMIT_CREATE_TEXT}
-          </Button>
-        </>
+        <FormModalActions
+          cancelText={TASK_FORM_CANCEL_TEXT}
+          submitText={isEdit ? TASK_FORM_SUBMIT_SAVE_TEXT : TASK_FORM_SUBMIT_CREATE_TEXT}
+          onCancel={onClose}
+          isSubmitting={isSubmitting}
+          submitFormId={FORM_ID}
+        />
       }
     />
   )
