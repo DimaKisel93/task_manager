@@ -1,0 +1,6 @@
+export { appStyles } from './appStyles'
+export { taskCardStyles } from './taskCardStyles'
+export { taskFormModalStyles } from './taskFormModalStyles'
+export { tasksFiltersStyles } from './tasksFiltersStyles'
+export { tasksPageStyles } from './tasksPageStyles'
+export { tasksSortBarStyles } from './tasksSortBarStyles'

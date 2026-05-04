@@ -1,14 +1,17 @@
 import { Alert, Button, CircularProgress, Stack } from '@mui/material'
 import { useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
-import { TaskCard } from '../components/TaskCard'
+import { TaskCard } from '../components/tasks/TaskCard'
 import { DeleteTaskConfirmModal } from '../components/modals/DeleteTaskConfirmModal'
+import { TaskFormModal } from '../components/modals/TaskFormModal'
+import { TASK_DETAILS_EDIT_TEXT } from '../constants/tasks'
 import { useDeleteTaskMutation, useGetTaskByIdQuery } from '../services/tasksApi'
 
 export function TaskDetailsPage() {
   const { taskId } = useParams<{ taskId: string }>()
   const navigate = useNavigate()
   const [isDeleteOpen, setIsDeleteOpen] = useState(false)
+  const [isEditOpen, setIsEditOpen] = useState(false)
   const {
     data: task,
     isLoading,
@@ -44,11 +47,16 @@ export function TaskDetailsPage() {
     <Stack spacing={2}>
       <Stack direction="row" spacing={2} justifyContent="space-between" alignItems="center">
         <Button component={Link} to="/" variant="outlined">
-          Back to tasks
+          Вернуться к задачам
         </Button>
-        <Button color="error" variant="contained" onClick={() => setIsDeleteOpen(true)}>
-          Delete
-        </Button>
+        <Stack direction="row" spacing={1}>
+          <Button variant="contained" onClick={() => setIsEditOpen(true)}>
+            {TASK_DETAILS_EDIT_TEXT}
+          </Button>
+          <Button color="error" variant="contained" onClick={() => setIsDeleteOpen(true)}>
+            Удалить
+          </Button>
+        </Stack>
       </Stack>
 
       {isDeleteError && <Alert severity="error">Failed to delete task.</Alert>}
@@ -61,6 +69,8 @@ export function TaskDetailsPage() {
         onClose={() => setIsDeleteOpen(false)}
         onConfirm={handleDeleteTask}
       />
+
+      <TaskFormModal open={isEditOpen} task={task} onClose={() => setIsEditOpen(false)} />
     </Stack>
   )
 }

@@ -8,9 +8,10 @@ import {
   TASKS_FILTER_TAG_LABEL_TEXT,
   priorityMap,
   statusMap,
-} from '../constants/tasks'
-import type { Tag, TaskPriority, TaskStatus } from '../types/task'
-import { fromSelectValue, toSelectValue } from '../utils/helpers'
+} from '../../constants/tasks'
+import { tasksFiltersStyles } from '../../constants/styles'
+import type { Tag, TaskPriority, TaskStatus } from '../../types/task'
+import { fromSelectValue, toSelectValue } from '../../utils/helpers'
 
 interface TasksFiltersProps {
   search: string
@@ -42,7 +43,7 @@ export function TasksFilters({
         placeholder={TASKS_FILTER_SEARCH_PLACEHOLDER_TEXT}
         value={search}
         onChange={(event) => onSearchChange(event.target.value)}
-        sx={{ minWidth: 240 }}
+        sx={tasksFiltersStyles.search}
       />
 
       <TextField
@@ -50,7 +51,7 @@ export function TasksFilters({
         label={TASKS_FILTER_STATUS_LABEL_TEXT}
         value={toSelectValue(selectedStatus)}
         onChange={(event) => onStatusChange(fromSelectValue(event.target.value as TaskStatus | ''))}
-        sx={{ minWidth: 180 }}
+        sx={tasksFiltersStyles.select}
       >
         <MenuItem value="">{TASKS_FILTER_ALL_OPTION_TEXT}</MenuItem>
         <MenuItem value="todo">{statusMap.todo.label}</MenuItem>
@@ -65,7 +66,7 @@ export function TasksFilters({
         onChange={(event) =>
           onPriorityChange(fromSelectValue(event.target.value as TaskPriority | ''))
         }
-        sx={{ minWidth: 180 }}
+        sx={tasksFiltersStyles.select}
       >
         <MenuItem value="">{TASKS_FILTER_ALL_OPTION_TEXT}</MenuItem>
         <MenuItem value="low">{priorityMap.low.label}</MenuItem>
@@ -78,7 +79,7 @@ export function TasksFilters({
         label={TASKS_FILTER_TAG_LABEL_TEXT}
         value={selectedTag ?? ''}
         onChange={(event) => onTagChange(event.target.value || null)}
-        sx={{ minWidth: 180 }}
+        sx={tasksFiltersStyles.select}
       >
         <MenuItem value="">{TASKS_FILTER_ALL_OPTION_TEXT}</MenuItem>
         {tags.map((tag) => (

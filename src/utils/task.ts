@@ -9,6 +9,7 @@ import {
   TASKS_FILTER_SORT_DESC_TEXT,
 } from '../constants/tasks'
 import type { ActiveFiltersParams } from '../types/task'
+import type { TaskFormValues } from '../schemas/taskFormSchema'
 
 export function isTaskOverdue(task: Task, now = new Date()): boolean {
   if (task.status === TASK_STATUS_DONE) {
@@ -39,7 +40,8 @@ export const buildActiveFilters = ({
   if (sortBy) {
     const sortByLabel =
       sortBy === 'createdAt' ? TASKS_FILTER_SORT_CREATED_AT_TEXT : TASKS_FILTER_SORT_DEADLINE_TEXT
-    const orderLabel = sortOrder === 'asc' ? TASKS_FILTER_SORT_ASC_TEXT : TASKS_FILTER_SORT_DESC_TEXT
+    const orderLabel =
+      sortOrder === 'asc' ? TASKS_FILTER_SORT_ASC_TEXT : TASKS_FILTER_SORT_DESC_TEXT
 
     result.push(`Sort: ${sortByLabel} (${orderLabel})`)
   }
@@ -57,4 +59,42 @@ export const buildActiveFilters = ({
   }
 
   return result
+}
+
+export function normalizeTags(tags: string[]): string[] {
+  const seen = new Set<string>()
+  const out: string[] = []
+  for (const t of tags) {
+    const s = t.trim()
+    if (!s || seen.has(s)) continue
+    seen.add(s)
+    out.push(s)
+  }
+  return out
+}
+
+function deadlineForInput(deadline: string): string {
+  const d = deadline.slice(0, 10)
+  return /^\d{4}-\d{2}-\d{2}$/.test(d) ? d : ''
+}
+
+export function defaultValues(task?: Task | null): TaskFormValues {
+  if (!task) {
+    return {
+      title: '',
+      description: '',
+      status: 'todo',
+      priority: 'medium',
+      deadline: '',
+      tags: [],
+    }
+  }
+  return {
+    title: task.title,
+    description: task.description ?? '',
+    status: task.status,
+    priority: task.priority,
+    deadline: deadlineForInput(task.deadline),
+    tags: [...task.tags],
+  }
 }

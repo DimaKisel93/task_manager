@@ -14,9 +14,10 @@ import {
   TASKS_FILTER_SORT_CREATED_AT_TEXT,
   TASKS_FILTER_SORT_DEADLINE_TEXT,
   TASKS_FILTER_SORT_DESC_TEXT,
-} from '../constants/tasks'
-import type { TasksSortBy, TasksSortOrder } from '../types/tasksApi'
-import { fromSelectValue, toSelectValue } from '../utils/helpers'
+} from '../../constants/tasks'
+import { tasksSortBarStyles } from '../../constants/styles'
+import type { TasksSortBy, TasksSortOrder } from '../../types/tasksApi'
+import { fromSelectValue, toSelectValue } from '../../utils/helpers'
 
 interface TasksSortBarProps {
   sortBy: TasksSortBy | null
@@ -32,9 +33,9 @@ export function TasksSortBar({
   onSortOrderChange,
 }: TasksSortBarProps) {
   return (
-    <Paper variant="outlined" sx={{ p: 2 }}>
+    <Paper variant="outlined" sx={tasksSortBarStyles.paper}>
       <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} alignItems={{ sm: 'center' }}>
-        <FormControl size="small" sx={{ minWidth: 220 }}>
+        <FormControl size="small" sx={tasksSortBarStyles.sortByControl}>
           <InputLabel id="tasks-sort-by-label">{TASKS_FILTER_SORT_BY_LABEL_TEXT}</InputLabel>
           <Select
             labelId="tasks-sort-by-label"

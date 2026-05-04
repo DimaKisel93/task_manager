@@ -1,23 +1,21 @@
-import { AppBar, Box, Button, Container, Toolbar, Typography } from '@mui/material'
+import { AppBar, Box, Button, Container, Toolbar } from '@mui/material'
 import { Link, Navigate, Route, Routes } from 'react-router-dom'
 import { TasksPage } from './pages/TasksPage'
 import { TaskDetailsPage } from './pages/TaskDetailsPage'
+import { appStyles } from './constants/styles'
 
 function App() {
   return (
-    <Box sx={{ minHeight: '100vh', backgroundColor: '#f5f7fb' }}>
+    <Box sx={appStyles.root}>
       <AppBar position="static">
         <Toolbar>
-          <Typography variant="h6" sx={{ flexGrow: 1 }}>
-            Task Manager
-          </Typography>
           <Button color="inherit" component={Link} to="/">
-            Tasks
+            Менеджер задач
           </Button>
         </Toolbar>
       </AppBar>
 
-      <Container maxWidth="md" sx={{ py: 4 }}>
+      <Container maxWidth="md" sx={appStyles.container}>
         <Routes>
           <Route path="/" element={<TasksPage />} />
           <Route path="/task/:taskId" element={<TaskDetailsPage />} />

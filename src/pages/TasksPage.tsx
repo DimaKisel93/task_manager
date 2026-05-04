@@ -1,14 +1,10 @@
-import {
-  Alert,
-  Button,
-  CircularProgress,
-  Pagination,
-  Stack,
-} from '@mui/material'
+import { Alert, Button, CircularProgress, Pagination, Stack } from '@mui/material'
+import { useState } from 'react'
 import { useGetTagsQuery, useGetTasksQuery } from '../services/tasksApi'
-import { TaskCard } from '../components/TaskCard'
-import { TasksFilters } from '../components/TasksFilters'
-import { TasksSortBar } from '../components/TasksSortBar'
+import { TaskCard } from '../components/tasks/TaskCard'
+import { TaskFormModal } from '../components/modals/TaskFormModal'
+import { TasksFilters } from '../components/tasks/TasksFilters'
+import { TasksSortBar } from '../components/tasks/TasksSortBar'
 import {
   PAGE_SIZE,
   TASKS_PAGE_ACTIVE_FILTERS_PREFIX_TEXT,
@@ -16,11 +12,14 @@ import {
   TASKS_PAGE_EMPTY_WITHOUT_FILTERS_TEXT,
   TASKS_PAGE_EMPTY_WITH_FILTERS_TEXT,
   TASKS_PAGE_LOAD_ERROR_TEXT,
+  TASKS_PAGE_NEW_TASK_TEXT,
 } from '../constants/tasks'
+import { tasksPageStyles } from '../constants/styles'
 import { useTasksFilters } from '../hooks/useTasksFilters'
 import { buildActiveFilters } from '../utils/task'
 
 export function TasksPage() {
+  const [isFormOpen, setIsFormOpen] = useState(false)
   const {
     state: { page, search, sortBy, sortOrder, tag, status, priority },
     actions,
@@ -62,6 +61,12 @@ export function TasksPage() {
 
   return (
     <Stack spacing={2}>
+      <Stack direction="row" justifyContent="flex-end">
+        <Button variant="contained" onClick={() => setIsFormOpen(true)}>
+          {TASKS_PAGE_NEW_TASK_TEXT}
+        </Button>
+      </Stack>
+
       <TasksFilters
         search={search}
         selectedStatus={status}
@@ -107,11 +112,13 @@ export function TasksPage() {
             page={page}
             count={pageCount}
             color="primary"
-            sx={{ alignSelf: 'center' }}
+            sx={tasksPageStyles.pagination}
             onChange={(_, value) => actions.setPage(value)}
           />
         </>
       )}
+
+      <TaskFormModal open={isFormOpen} onClose={() => setIsFormOpen(false)} />
     </Stack>
   )
 }
